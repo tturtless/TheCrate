@@ -14,7 +14,7 @@
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+  body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
 
   /* HEADER */
   .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
@@ -33,8 +33,12 @@
   .stats-btn:hover{background:#a78bca;color:#fff;border-color:#a78bca}
   .add-album-btn{background:var(--gold);color:var(--bg);border:1px solid var(--gold);border-radius:4px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;padding:8px 13px;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s;display:flex;align-items:center;gap:6px}
   .add-album-btn:hover{background:#DFB95C;border-color:#DFB95C}
-  .spin-btn{background:var(--gold);color:var(--bg);border:none;border-radius:4px;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;padding:8px 14px;cursor:pointer;white-space:nowrap;transition:background .2s,transform .1s}
-  .spin-btn:hover{background:#DFB95C;transform:translateY(-1px)}
+  .share-crate-btn{background:rgba(201,168,76,.10);color:var(--gold);border:1px solid var(--gold-dim);border-radius:4px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:8px 13px;cursor:pointer;white-space:nowrap;letter-spacing:.04em;transition:background .2s,border-color .2s;display:flex;align-items:center;gap:6px}
+  .share-crate-btn:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+  .view-friend-btn{background:var(--surface2);color:#7fb8a0;border:1px solid #3a6a55;border-radius:4px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:8px 13px;cursor:pointer;white-space:nowrap;letter-spacing:.04em;transition:background .2s,border-color .2s;display:flex;align-items:center;gap:6px}
+  .view-friend-btn:hover{background:#7fb8a0;color:#0D0D0D;border-color:#7fb8a0}
+  .spin-btn{background:var(--surface2);color:#c97f4f;border:1px solid #c97f4f;border-radius:4px;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;padding:8px 14px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s,transform .1s;display:flex;align-items:center;gap:6px}
+  .spin-btn:hover{background:#c97f4f;color:var(--bg);transform:translateY(-1px)}
 
   /* FILTER BAR */
   .filter-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -274,6 +278,73 @@
 
   /* STATS MODAL */
   .stats-modal{background:var(--surface);border:1px solid var(--border);border-radius:6px;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;position:relative;animation:modalIn .3s cubic-bezier(.16,1,.3,1) both}
+
+  /* SHARE / FRIEND-VIEW MODALS */
+  .share-modal,.friend-modal{background:var(--surface);border:1px solid var(--border);border-radius:6px;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;position:relative;animation:modalIn .3s cubic-bezier(.16,1,.3,1) both}
+  .share-header,.friend-header{padding:22px 24px 16px;border-bottom:1px solid var(--border)}
+  .share-header h2,.friend-header h2{font-family:'Playfair Display',serif;font-size:19px;color:var(--cream);margin-bottom:4px}
+  .share-header p,.friend-header p{font-size:12px;color:var(--cream-dim)}
+  .share-body,.friend-body{padding:18px 24px 24px}
+  .share-textarea{width:100%;min-height:260px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--cream);font-family:'Courier Prime',monospace;font-size:12px;line-height:1.55;padding:12px;resize:vertical;outline:none}
+  .share-textarea:focus{border-color:var(--gold-dim)}
+  .share-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .share-copy-btn{background:var(--gold);color:var(--bg);border:1px solid var(--gold);border-radius:4px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;cursor:pointer;transition:background .2s}
+  .share-copy-btn:hover{background:#DFB95C}
+  .share-meta{font-size:11px;color:var(--cream-dim);margin-top:8px;font-family:'Courier Prime',monospace}
+  .friend-view-btn{background:#7fb8a0;color:#0D0D0D;border:1px solid #7fb8a0;border-radius:4px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;cursor:pointer;transition:background .2s}
+  .friend-view-btn:hover{background:#9accb6}
+  .friend-clear-btn{background:none;color:var(--cream-dim);border:1px solid var(--border);border-radius:4px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:9px 16px;cursor:pointer;transition:border-color .2s,color .2s}
+  .friend-clear-btn:hover{border-color:var(--red-bright);color:var(--red-bright)}
+  .friend-banner{background:rgba(127,184,160,.10);border:1px solid #3a6a55;border-radius:4px;padding:10px 14px;font-size:12px;color:#9accb6;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .friend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+  .friend-card{background:var(--surface2);border:1px solid var(--border);border-radius:3px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
+  .friend-card:hover{transform:translateY(-4px);border-color:var(--gold-dim);box-shadow:0 12px 32px rgba(0,0,0,.6)}
+  .friend-card .fc-art-wrap{position:relative;width:100%;aspect-ratio:1;flex-shrink:0}
+  .friend-card .fc-art{width:100%;height:100%;aspect-ratio:1;object-fit:cover;background:var(--groove);display:block}
+  .friend-card .fc-body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:2px}
+  .friend-card .fc-artist{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .friend-card .fc-title{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--cream);line-height:1.25}
+  .friend-card .fc-meta{font-family:'Courier Prime',monospace;font-size:10px;color:var(--cream-dim);margin-top:2px}
+  .fc-overlay-btns{position:absolute;top:6px;right:6px;display:flex;flex-direction:column;gap:4px;z-index:5;opacity:0;pointer-events:none}
+  .friend-card:hover .fc-overlay-btns{opacity:1;pointer-events:auto}
+  .fc-icon-btn{width:30px;height:30px;border-radius:50%;background:rgba(13,13,13,.78);border:1px solid var(--gold-dim);color:var(--cream);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,color .15s;backdrop-filter:blur(3px)}
+  .fc-icon-btn:hover{background:var(--gold);color:var(--bg)}
+  .fc-icon-btn.fav-active{color:#e0566f;border-color:#e0566f}
+  .friend-empty{text-align:center;padding:40px 20px;color:var(--cream-dim);font-size:13px}
+  .friend-parse-error{background:rgba(192,57,43,.10);border:1px solid var(--red-bright);border-radius:4px;padding:10px 14px;font-size:12px;color:#e08080;margin-top:10px}
+
+  /* FRIEND MODAL TABS */
+  .friend-modal{max-width:780px}
+  .friend-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface)}
+  .friend-tab-btn{flex:1;background:none;border:none;border-bottom:2px solid transparent;color:var(--cream-dim);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:11px 8px;cursor:pointer;transition:color .15s,border-color .15s}
+  .friend-tab-btn.active{color:#7fb8a0;border-bottom-color:#7fb8a0}
+  .friend-tab-btn:not(.active):hover{color:var(--cream)}
+  .friend-tab-panel{display:none;padding:18px 24px 24px}
+  .friend-tab-panel.active{display:block}
+
+  /* SAVED CRATES LIST */
+  .saved-crates-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+  .saved-crate-row{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:10px 12px;cursor:pointer;transition:border-color .15s}
+  .saved-crate-row:hover{border-color:#3a6a55}
+  .saved-crate-row.selected{border-color:#7fb8a0;background:rgba(127,184,160,.06)}
+  .scr-name{flex:1;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--cream)}
+  .scr-count{font-family:'Courier Prime',monospace;font-size:11px;color:var(--cream-dim);flex-shrink:0}
+  .scr-rename-btn,.scr-delete-btn{background:none;border:1px solid var(--border);border-radius:3px;color:var(--cream-dim);font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;cursor:pointer;transition:border-color .15s,color .15s;flex-shrink:0}
+  .scr-rename-btn:hover{border-color:var(--gold-dim);color:var(--gold)}
+  .scr-delete-btn:hover{border-color:var(--red-bright);color:var(--red-bright)}
+  .scr-rename-input{flex:1;background:var(--bg);border:1px solid var(--gold-dim);border-radius:3px;color:var(--cream);font-family:'Playfair Display',serif;font-size:14px;padding:3px 8px;outline:none}
+  .no-saved-crates{text-align:center;padding:32px 20px;color:var(--cream-dim);font-size:13px}
+
+  /* ADD ALBUM TO FRIEND CRATE */
+  .friend-add-section{border-top:1px solid var(--border);margin-top:16px;padding-top:16px}
+  .friend-add-row{display:flex;gap:8px;margin-bottom:8px}
+  .friend-add-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--cream);font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;outline:none;transition:border-color .2s}
+  .friend-add-input:focus{border-color:#3a6a55}
+  .friend-add-input::placeholder{color:var(--cream-dim)}
+  .friend-add-btn{background:#7fb8a0;border:none;border-radius:3px;color:#0D0D0D;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;padding:8px 14px;cursor:pointer;white-space:nowrap;transition:background .2s}
+  .friend-add-btn:hover{background:#9accb6}
+  .friend-save-crate-btn{background:rgba(127,184,160,.12);color:#7fb8a0;border:1px solid #3a6a55;border-radius:4px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:8px 14px;cursor:pointer;transition:background .2s,border-color .2s;display:flex;align-items:center;gap:6px}
+  .friend-save-crate-btn:hover{background:#7fb8a0;color:#0D0D0D;border-color:#7fb8a0}
   .stats-modal::-webkit-scrollbar{width:5px}
   .stats-modal::-webkit-scrollbar-track{background:var(--surface)}
   .stats-modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
@@ -326,17 +397,16 @@
   /* RESPONSIVE */
   /* At viewport width=600, this breakpoint always fires on mobile */
   @media(max-width:620px){
-    /* Header: compact but keep all labels */
-    .site-header{gap:6px;padding:0 10px;height:56px;flex-wrap:nowrap}
+    /* Header: compact, wraps to multiple rows so every button stays visible with no scrolling */
+    .site-header{gap:6px;row-gap:8px;padding:8px 10px;height:auto;flex-wrap:wrap}
     .logo{font-size:16px;flex-shrink:0}
     .logo span{display:none}
-    .header-search{max-width:120px;flex-shrink:1;min-width:60px}
+    .header-search{flex:1;max-width:none;min-width:90px}
     .header-search input{font-size:11px;padding:6px 28px 6px 8px}
-    .header-actions{gap:4px;flex-shrink:0}
-    .stats-btn,.want-list-btn,.add-album-btn{
-      padding:6px 7px;font-size:10px;gap:3px
+    .header-actions{flex-basis:100%;flex-wrap:nowrap;justify-content:flex-start;gap:3px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .stats-btn,.want-list-btn,.add-album-btn,.share-crate-btn,.view-friend-btn,.spin-btn{
+      padding:6px 6px;font-size:9.5px;gap:3px;flex-shrink:0
     }
-    .spin-btn{padding:6px 8px;font-size:11px}
     /* Filter bar */
     .filter-bar{padding:7px 10px;gap:5px;flex-wrap:nowrap;overflow-x:auto}
     .filter-label{display:none}
@@ -371,10 +441,12 @@
     <span class="search-icon">⌕</span>
   </div>
   <div class="header-actions">
-    <button class="stats-btn" id="statsBtn"><span>📊</span><span>Crate Facts</span></button>
+    <button class="stats-btn" id="statsBtn"><span>📊</span><span>Stash Facts</span></button>
     <button class="want-list-btn" id="wantListBtn"><span>🎯</span><span>Wish List</span></button>
+    <button class="share-crate-btn" id="shareCrateBtn"><span>📤</span><span>Share My Crate</span></button>
+    <button class="view-friend-btn" id="viewFriendBtn"><span>👀</span><span>View a Friend's Crate</span></button>
     <button class="add-album-btn" id="addAlbumBtn"><span style="font-size:16px;line-height:1">＋</span><span>Add to Crate</span></button>
-    <button class="spin-btn" id="spinBtn">🎲 Spin</button>
+    <button class="spin-btn" id="spinBtn"><span>🎲</span><span>Spin</span></button>
   </div>
 </header>
 
@@ -508,6 +580,11 @@
         <span style="font-size:13px">→</span> Move to Crate
       </button>
     </div>
+    <div style="padding:14px 24px;border-top:1px solid var(--border);display:none;justify-content:flex-end;gap:8px" id="detailFooterFriend">
+      <button id="friendDetailRemoveBtn" onclick="removeFriendAlbumFromModal()" style="background:none;border:1px solid var(--red-bright);border-radius:3px;color:var(--red-bright);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;padding:7px 14px;cursor:pointer;transition:background .15s,color .15s;display:flex;align-items:center;gap:6px">
+        <span style="font-size:13px">🗑</span> Remove from Their Crate
+      </button>
+    </div>
   </div>
 </div>
 
@@ -551,12 +628,12 @@
         <div class="form-field"><label>Year</label><input class="form-input" id="formYear" type="number" placeholder="1977" min="1900" max="2030"></div>
         <div class="form-field"><label>Genre</label>
           <select class="form-select" id="formGenre">
+            <option value="__custom__">✚ Create your own…</option>
             <option>Classic Rock</option><option>Hard Rock</option><option>Heavy Metal</option>
             <option>Progressive Rock</option><option>New Wave</option><option>Punk / Alternative</option>
             <option>Pop</option><option>R&B / Soul</option><option>Hip-Hop</option><option>Country</option>
             <option>Singer-Songwriter</option><option>Soundtrack</option><option>Classical</option>
             <option>Holiday</option><option>Compilation</option>
-            <option value="__custom__">✚ Create your own…</option>
           </select>
         </div>
       </div>
@@ -599,14 +676,91 @@
   <div class="stats-modal">
     <button class="modal-close" id="statsClose">×</button>
     <div class="stats-header">
-      <h2>📊 The Crate Facts</h2>
+      <h2>📊 The Stash Facts</h2>
       <p>A deep look at what's spinning in your crate</p>
     </div>
     <div class="stats-body" id="statsBody"></div>
   </div>
 </div>
 
+<!-- SHARE MY CRATE MODAL -->
+<div class="modal-overlay" id="shareModal" role="dialog" aria-modal="true">
+  <div class="share-modal">
+    <button class="modal-close" id="shareClose">×</button>
+    <div class="share-header">
+      <h2>📤 Share My Crate</h2>
+      <p>Use "Copy as Link" to generate a link that opens directly on <strong>tturtless.github.io/AlbumCrate</strong> — friends can browse your crate without needing this file. Or copy the text to paste into "View a Friend's Crate".</p>
+    </div>
+    <div class="share-body">
+      <textarea class="share-textarea" id="shareTextarea" readonly></textarea>
+      <div class="share-actions">
+        <button class="share-copy-btn" id="shareCopyBtn">📋 Copy to Clipboard</button>
+        <button class="share-copy-btn" id="shareLinkBtn">🔗 Copy as Link</button>
+      </div>
+      <div class="share-meta" id="shareMeta"></div>
+      <div class="share-meta" id="shareLinkMeta" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW A FRIEND'S CRATE MODAL -->
+<div class="modal-overlay" id="friendModal" role="dialog" aria-modal="true">
+  <div class="friend-modal">
+    <button class="modal-close" id="friendClose">×</button>
+    <div class="friend-header">
+      <h2>👀 Friends' Crates</h2>
+      <p>Load a shared link to browse a friend's collection — save it to keep their crate and add new albums as they get them.</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="friend-tabs">
+      <button class="friend-tab-btn active" data-ftab="load">Load a Crate</button>
+      <button class="friend-tab-btn" data-ftab="saved">Saved Crates</button>
+      <button class="friend-tab-btn" data-ftab="browse" id="browseFriendTabBtn" style="display:none">Browse</button>
+    </div>
+
+    <!-- TAB: LOAD -->
+    <div class="friend-tab-panel active" id="ftab-load">
+      <input type="text" class="share-textarea" id="friendLinkInput" placeholder="Paste a shared crate link here…" style="min-height:auto;height:auto;padding:10px 12px;margin-bottom:10px">
+      <div class="share-actions" style="margin-top:0;margin-bottom:16px">
+        <button class="friend-view-btn" id="friendLinkBtn">🔗 Open Link</button>
+      </div>
+      <div class="friend-or-divider" style="font-size:11px;color:var(--cream-dim);text-align:center;margin:4px 0 14px;text-transform:uppercase;letter-spacing:.1em">— or paste text —</div>
+      <textarea class="share-textarea" id="friendTextarea" placeholder="Paste your friend's crate text here…"></textarea>
+      <div class="share-actions">
+        <button class="friend-view-btn" id="friendViewBtn">👀 View Crate</button>
+        <button class="friend-clear-btn" id="friendClearBtn">Clear</button>
+      </div>
+      <div id="friendParseError"></div>
+    </div>
+
+    <!-- TAB: SAVED CRATES -->
+    <div class="friend-tab-panel" id="ftab-saved">
+      <div class="saved-crates-list" id="savedCratesList"></div>
+      <div class="no-saved-crates" id="noSavedCrates" style="display:none">No saved crates yet — load a friend's link and save it.</div>
+    </div>
+
+    <!-- TAB: BROWSE (shown after loading) -->
+    <div class="friend-tab-panel" id="ftab-browse">
+      <div id="friendResults"></div>
+
+      <!-- ADD ALBUM SECTION -->
+      <div class="friend-add-section" id="friendAddSection" style="display:none">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">＋ Add a New Album</div>
+        <div class="friend-add-row" style="margin-bottom:10px">
+          <div class="autocomplete-wrap" id="friendAddAutoWrap" style="flex:1">
+            <input class="friend-add-input" id="friendAddSearchInput" placeholder="Search artist or album — results appear as you type…" autocomplete="off" style="width:100%">
+            <div class="autocomplete-dropdown" id="friendAddAutoDropdown"></div>
+          </div>
+          <button class="friend-add-btn" id="friendAddManualBtn" onclick="addAlbumToFriendCrateManual()">＋ Add Manually</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
+
 
 <script>
 // ── GENRE IMAGES ──
@@ -1342,6 +1496,7 @@ let state={search:"",genre:"",decade:"",sort:"az",favOnly:false};
 let activeMenuId=null;
 let currentDetailId=null;
 let currentWantId=null; // set when the detail modal is showing a wishlist item instead of a crate album
+let currentFriendIdx=null; // set when the detail modal is showing an album from a friend's crate (read-only)
 function isWantDetailOpen(){return currentWantId!==null}
 
 // ── FILTER + SORT ──
@@ -1368,8 +1523,8 @@ function buildFilters(){
   const gSel=document.getElementById("genreFilter"),dSel=document.getElementById("decadeFilter");
   while(gSel.options.length>1)gSel.remove(1);
   while(dSel.options.length>1)dSel.remove(1);
-  allGenres().forEach(g=>gSel.add(new Option(g,g)));
   gSel.add(new Option("✚ Create your own…","__custom__"));
+  allGenres().forEach(g=>gSel.add(new Option(g,g)));
   unique(vinylCollection.map(a=>a.decade)).sort((a,b)=>a-b).forEach(d=>dSel.add(new Option(decadeLabel(d),d)));
 }
 
@@ -1454,8 +1609,8 @@ function openGenreEditor(){
   const sel=document.getElementById("genreEditorSelect");
   sel.innerHTML="";
   const a=vinylCollection.find(x=>x.id===currentDetailId);
-  allGenres().forEach(g=>{const o=new Option(g,g);if(a&&a.genre===g)o.selected=true;sel.add(o)});
   sel.add(new Option("✚ Create your own…","__custom__"));
+  allGenres().forEach(g=>{const o=new Option(g,g);if(a&&a.genre===g)o.selected=true;sel.add(o)});
   sel.onchange=()=>{
     document.getElementById("customGenreWrap").style.display=sel.value==="__custom__"?"block":"none";
     if(sel.value==="__custom__")document.getElementById("customGenreInput").focus();
@@ -1627,18 +1782,25 @@ function openDetail(id){
 
 // Shows/hides the parts of the detail modal that only make sense for albums you
 // already own (grade, tracklist, condition, format) vs. a wishlist item you don't
-// own yet. Both modes reuse the same modal shell so the look stays consistent.
+// own yet, vs. a read-only peek at an album in a friend's crate. All modes reuse
+// the same modal shell so the look stays consistent.
 function setDetailModalMode(mode){
   const isWant=mode==="want";
-  document.getElementById("detailFooterCrate").style.display=isWant?"none":"flex";
+  const isFriend=mode==="friend";
+  const ownerOnly=isWant||isFriend; // hides personal-collection-only fields
+  document.getElementById("detailFooterCrate").style.display=isWant||isFriend?"none":"flex";
   document.getElementById("detailFooterWant").style.display=isWant?"flex":"none";
-  document.querySelector('.tab-btn[data-tab="grade"]').style.display=isWant?"none":"";
-  document.querySelector('.tab-btn[data-tab="tracklist"]').style.display=isWant?"none":"";
-  document.querySelector('.tab-btn[data-tab="notes"]').style.display=isWant?"none":"";
-  document.getElementById("photoUploadTrigger").style.display=isWant?"none":"";
+  document.getElementById("detailFooterFriend").style.display=isFriend?"flex":"none";
+  document.querySelector('.tab-btn[data-tab="grade"]').style.display=ownerOnly?"none":"";
+  document.querySelector('.tab-btn[data-tab="tracklist"]').style.display=ownerOnly?"none":"";
+  document.querySelector('.tab-btn[data-tab="notes"]').style.display=ownerOnly?"none":"";
+  document.getElementById("photoUploadTrigger").style.display=ownerOnly?"none":"";
   const condChip=document.getElementById("conditionChip"),fmtChip=document.getElementById("modalFormat").closest(".detail-chip");
-  if(condChip)condChip.style.display=isWant?"none":"";
-  if(fmtChip)fmtChip.style.display=isWant?"none":"";
+  if(condChip)condChip.style.display=ownerOnly?"none":"";
+  if(fmtChip)fmtChip.style.display=ownerOnly?"none":"";
+  // Friend mode is fully read-only: no favoriting someone else's record from here, no genre editing.
+  const heartBtn=document.getElementById("detailHeartBtn");
+  if(heartBtn)heartBtn.style.display=isFriend?"none":"flex";
 }
 
 // Opens the same detail modal for a wishlist item — shows artist, title, year,
@@ -1668,6 +1830,36 @@ function openWantDetail(id){
   document.getElementById("detailClose").focus();
 }
 
+// Opens the same detail modal for an album in a friend's crate — shows artist,
+// title, year, decade, genre, and About info just like your own albums, but
+// read-only: no grade/tracklist/notes/condition/format (that's personal data
+// that was never part of what your friend shared) and no editing controls.
+function openFriendDetail(idx){
+  const item=activeFriendAlbums[idx];if(!item)return;
+  currentFriendIdx=idx;
+  currentDetailId=null;
+  currentWantId=null;
+  setDetailModalMode("friend");
+  const modalArt=document.getElementById("modalArt");
+  const existingImg=document.getElementById(`fca-${idx}`);
+  modalArt.src=(existingImg&&existingImg.src)||getPlaceholder(item.genre||"default");
+  modalArt.alt=item.title;
+  fetchFriendCover(item.artist,item.title).then(url=>{if(url)modalArt.src=url});
+  document.getElementById("modalGenreText").textContent=item.genre||"Unsorted";
+  document.getElementById("modalGenre").title="";
+  document.getElementById("modalGenre").onclick=null;
+  document.getElementById("modalGenre").style.cursor="default";
+  closeGenreEditor();
+  document.getElementById("modalTitle").textContent=item.title;
+  document.getElementById("modalArtist").textContent=item.artist;
+  document.getElementById("modalYear").textContent=item.year||"—";
+  document.getElementById("modalDecade").textContent=item.year?decadeLabel(Math.floor(parseInt(item.year)/10)*10):"—";
+  activateTab("about");
+  buildAboutTab(null,null,idx);
+  document.getElementById("detailModal").classList.add("open");
+  document.getElementById("detailClose").focus();
+}
+
 function updateWantDetailHeartBtn(id){
   const item=wantList.find(x=>x.id===id);if(!item)return;
   const btn=document.getElementById("detailHeartBtn"),icon=document.getElementById("detailHeartIcon"),label=document.getElementById("detailHeartLabel");
@@ -1679,6 +1871,44 @@ function toggleWantFavoriteFromModal(){
   toggleWantFavorite(currentWantId);
   updateWantDetailHeartBtn(currentWantId);
 }
+function removeFriendAlbumFromModal(){
+  if(currentFriendIdx==null)return;
+  const item=activeFriendAlbums[currentFriendIdx];
+  if(item&&!confirm(`Remove "${item.title}" from this crate?`))return;
+  activeFriendAlbums.splice(currentFriendIdx,1);
+  autosaveFriendCrate();
+  document.getElementById("detailModal").classList.remove("open");
+  currentFriendIdx=null;
+  showToast(item?`Removed "${item.title}"`:"Removed from crate");
+  reopenFriendModalToBrowse();
+}
+
+function removeFriendAlbumByIdx(idx){
+  const item=activeFriendAlbums[idx];if(!item)return;
+  if(!confirm(`Remove "${item.title}" from this crate?`))return;
+  activeFriendAlbums.splice(idx,1);
+  autosaveFriendCrate();
+  renderFriendResults(activeFriendAlbums);
+  showToast(`Removed "${item.title}"`);
+}
+
+// Reopens the friend modal on the Browse tab without resetting scroll —
+// used after closing the detail view for a friend's album so the user lands
+// back where they were instead of being sent all the way back to the top.
+function autosaveFriendCrate(){
+  if(activeFriendCrateId==null)return;
+  const crates=loadFriendCrates();
+  const idx=crates.findIndex(c=>c.id===activeFriendCrateId);
+  if(idx>-1){crates[idx].albums=activeFriendAlbums;saveFriendCrates(crates);}
+}
+
+function reopenFriendModalToBrowse(){
+  document.getElementById("friendModal").classList.add("open");
+  document.querySelectorAll(".friend-tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.ftab==="browse"));
+  document.querySelectorAll(".friend-tab-panel").forEach(p=>p.classList.toggle("active",p.id==="ftab-browse"));
+  renderFriendResults(activeFriendAlbums);
+}
+
 function removeWantFromModal(){
   if(currentWantId==null)return;
   const item=wantList.find(x=>x.id===currentWantId);
@@ -2242,10 +2472,11 @@ function renderAboutData(container, a, data){
     </div>`;
 }
 
-function buildAboutTab(id,wantItem){
-  const a=wantItem?{artist:wantItem.artist,title:wantItem.title,year:wantItem.year||"",genre:wantItem.genre||"Unsorted",decade:wantItem.year?Math.floor(parseInt(wantItem.year)/10)*10:""}:vinylCollection.find(x=>x.id===id);
+function buildAboutTab(id,wantItem,friendIdx){
+  const a=friendIdx!=null?activeFriendAlbums[friendIdx]:wantItem?{artist:wantItem.artist,title:wantItem.title,year:wantItem.year||"",genre:wantItem.genre||"Unsorted",decade:wantItem.year?Math.floor(parseInt(wantItem.year)/10)*10:""}:vinylCollection.find(x=>x.id===id);
   const container=document.getElementById("aboutContainer");
   if(!a){container.innerHTML="<p style='color:var(--cream-dim);font-size:13px;padding:8px'>No album selected.</p>";return}
+  const aDecade=a.decade!==undefined?a.decade:(a.year?Math.floor(parseInt(a.year)/10)*10:"");
 
   const key=`${a.artist}|${a.title}|${a.year}`.toLowerCase();
   const keyNoYear=`${a.artist}|${a.title}`.toLowerCase();
@@ -2267,7 +2498,7 @@ function buildAboutTab(id,wantItem){
           <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Artist</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${escAttr(a.artist)}</div></div>
           <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Year</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${a.year}</div></div>
           <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Genre</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${escAttr(a.genre)}</div></div>
-          <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Decade</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${a.decade}s</div></div>
+          <div><div style="font-size:10px;color:var(--cream-dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Decade</div><div style="font-family:'Courier Prime',monospace;font-size:13px;color:var(--cream)">${aDecade}s</div></div>
         </div>
       </div>
       <div style="text-align:center;padding:16px;color:var(--cream-dim);font-size:12px" id="mbLoadingMsg">
@@ -2277,8 +2508,8 @@ function buildAboutTab(id,wantItem){
     </div>`;
 
   fetchAlbumAbout(a.artist, a.title, a.year).then(data=>{
-    // Only update if this album/wishlist item is still open
-    if(wantItem ? currentWantId!==wantItem.id : currentDetailId!==id) return;
+    // Only update if this album/wishlist/friend item is still open
+    if(friendIdx!=null ? currentFriendIdx!==friendIdx : wantItem ? currentWantId!==wantItem.id : currentDetailId!==id) return;
     const stillContainer = document.getElementById("aboutContainer");
     if(!stillContainer) return;
     if(data){
@@ -2291,8 +2522,24 @@ function buildAboutTab(id,wantItem){
 }
 
 // Close detail modal
-document.getElementById("detailClose").addEventListener("click",()=>{document.getElementById("detailModal").classList.remove("open");closePhotoMenu();currentDetailId=null;currentWantId=null});
-document.getElementById("detailModal").addEventListener("click",e=>{if(e.target===document.getElementById("detailModal")){document.getElementById("detailModal").classList.remove("open");closePhotoMenu();currentDetailId=null;currentWantId=null}});
+document.getElementById("detailClose").addEventListener("click",()=>{
+  document.getElementById("detailModal").classList.remove("open");
+  closePhotoMenu();
+  currentDetailId=null;currentWantId=null;
+  const wasFriend=currentFriendIdx!=null;
+  currentFriendIdx=null;
+  if(wasFriend)reopenFriendModalToBrowse();
+});
+document.getElementById("detailModal").addEventListener("click",e=>{
+  if(e.target===document.getElementById("detailModal")){
+    document.getElementById("detailModal").classList.remove("open");
+    closePhotoMenu();
+    currentDetailId=null;currentWantId=null;
+    const wasFriend=currentFriendIdx!=null;
+    currentFriendIdx=null;
+    if(wasFriend)reopenFriendModalToBrowse();
+  }
+});
 
 // Delete from inside the detail modal
 function deleteAlbumFromModal(){
@@ -2828,7 +3075,545 @@ document.getElementById("searchInput").addEventListener("input",e=>{state.search
 document.getElementById("decadeFilter").addEventListener("change",e=>{state.decade=e.target.value;render()});
 document.getElementById("favFilterBtn").addEventListener("click",function(){state.favOnly=!state.favOnly;this.classList.toggle("active",state.favOnly);render()});
 document.querySelectorAll(".sort-btn").forEach(btn=>{btn.addEventListener("click",()=>{document.querySelectorAll(".sort-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");state.sort=btn.dataset.sort;render()})});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){document.getElementById("detailModal").classList.remove("open");document.getElementById("spinModal").classList.remove("open");document.getElementById("addModal").classList.remove("open");document.getElementById("wantlistModal").classList.remove("open");currentDetailId=null;currentWantId=null;closeCardMenu();closePhotoMenu();clearTimeout(spinTimeout)}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){
+  const wasFriendDetail=document.getElementById("detailModal").classList.contains("open")&&currentFriendIdx!=null;
+  document.getElementById("detailModal").classList.remove("open");document.getElementById("spinModal").classList.remove("open");document.getElementById("addModal").classList.remove("open");document.getElementById("wantlistModal").classList.remove("open");document.getElementById("shareModal").classList.remove("open");document.getElementById("friendModal").classList.remove("open");currentDetailId=null;currentWantId=null;currentFriendIdx=null;closeCardMenu();closePhotoMenu();clearTimeout(spinTimeout);
+  if(wasFriendDetail)reopenFriendModalToBrowse();
+}});
+
+// ── SHARE MY CRATE ──
+function buildShareText(){
+  const lines=[];
+  lines.push("THE CRATE — Shared Collection");
+  lines.push(`${vinylCollection.length} records`);
+  lines.push("---");
+  vinylCollection.slice().sort((a,b)=>a.artist.localeCompare(b.artist)||a.title.localeCompare(b.title)).forEach(a=>{
+    const fav=favorites.has(a.id)?" ★":"";
+    lines.push(`${a.artist} — ${a.title} (${a.year}) [${a.genre}]${fav}`);
+  });
+  return lines.join("\n");
+}
+
+// Compact encode: tab-delimited rows + genre dictionary, deflate-compressed, base64url.
+// Format (pre-compression): "v2\nGenre1\tGenre2\t...\nartist\ttitle\tyear\tgenreIndex\tfav\n..."
+// Falls back to legacy JSON-tuple format ("v1") if CompressionStream isn't available.
+function bytesToBase64Url(bytes){
+  let binary="";
+  bytes.forEach(b=>binary+=String.fromCharCode(b));
+  return btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function base64UrlToBytes(code){
+  const b64=code.replace(/-/g,"+").replace(/_/g,"/");
+  const pad=b64.length%4===0?"":"=".repeat(4-(b64.length%4));
+  const binary=atob(b64+pad);
+  const bytes=new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+  return bytes;
+}
+const TSV_ESC_TAB="\u2409", TSV_ESC_NL="\u240A"; // rare control-picture chars, safe stand-ins for real tabs/newlines in field values
+function tsvSafe(s){return String(s).replace(/\t/g,TSV_ESC_TAB).replace(/\n/g,TSV_ESC_NL)}
+function tsvUnsafe(s){return String(s).replace(new RegExp(TSV_ESC_TAB,"g"),"\t").replace(new RegExp(TSV_ESC_NL,"g"),"\n")}
+
+async function encodeCrateLink(albums){
+  const genreList=[...new Set(albums.map(a=>a.genre||"Unsorted"))];
+  const rows=albums.map(a=>{
+    const gi=genreList.indexOf(a.genre||"Unsorted");
+    return [tsvSafe(a.artist),tsvSafe(a.title),a.year,gi,favorites.has(a.id)?1:0].join("\t");
+  });
+  const payload="v2\n"+genreList.map(tsvSafe).join("\t")+"\n"+rows.join("\n");
+  const utf8Bytes=new TextEncoder().encode(payload);
+
+  if(typeof CompressionStream==="function"){
+    const cs=new CompressionStream("deflate-raw");
+    const writer=cs.writable.getWriter();
+    writer.write(utf8Bytes);
+    writer.close();
+    const compressed=new Uint8Array(await new Response(cs.readable).arrayBuffer());
+    return "c"+bytesToBase64Url(compressed); // "c" prefix = compressed
+  }
+  // Fallback: no compression support, just base64 the raw payload
+  return "u"+bytesToBase64Url(utf8Bytes); // "u" prefix = uncompressed
+}
+
+async function decodeCrateLink(code){
+  if(!code||code.length<2)throw new Error("empty code");
+  const tag=code[0], body=code.slice(1);
+  let bytes=base64UrlToBytes(body);
+
+  if(tag==="c"){
+    if(typeof DecompressionStream!=="function")throw new Error("decompression unsupported");
+    const ds=new DecompressionStream("deflate-raw");
+    const writer=ds.writable.getWriter();
+    writer.write(bytes);
+    writer.close();
+    bytes=new Uint8Array(await new Response(ds.readable).arrayBuffer());
+  }else if(tag!=="u"){
+    // Legacy v1 links (no tag prefix) were raw base64url of a JSON array — try that path.
+    return decodeLegacyCrateLink(code);
+  }
+
+  const payload=new TextDecoder().decode(bytes);
+  const nl1=payload.indexOf("\n");
+  const version=payload.slice(0,nl1);
+  if(version!=="v2")throw new Error("unsupported version");
+  const nl2=payload.indexOf("\n",nl1+1);
+  const genreList=payload.slice(nl1+1,nl2).split("\t").map(tsvUnsafe);
+  const body2=payload.slice(nl2+1);
+  const lines=body2.length?body2.split("\n"):[];
+  return lines.map(line=>{
+    const parts=line.split("\t");
+    const gi=parseInt(parts[3],10);
+    return {
+      artist:tsvUnsafe(parts[0]||""),
+      title:tsvUnsafe(parts[1]||""),
+      year:parts[2]||"",
+      genre:genreList[gi]||"Unsorted",
+      fav:parts[4]==="1"
+    };
+  });
+}
+
+// Legacy v1 format support: plain base64url of a JSON tuple array, no prefix tag.
+function decodeLegacyCrateLink(code){
+  const bytes=base64UrlToBytes(code);
+  const json=new TextDecoder().decode(bytes);
+  const tuples=JSON.parse(json);
+  if(!Array.isArray(tuples))throw new Error("bad format");
+  return tuples.map(t=>({artist:String(t[0]||""),title:String(t[1]||""),year:String(t[2]||""),genre:String(t[3]||"Unsorted"),fav:!!t[4]}));
+}
+
+async function buildShareLink(){
+  const code=await encodeCrateLink(vinylCollection);
+  const url=new URL("https://tturtless.github.io/AlbumCrate/");
+  url.hash="share="+code;
+  return url.toString();
+}
+
+document.getElementById("shareCrateBtn").addEventListener("click",()=>{
+  const text=buildShareText();
+  document.getElementById("shareTextarea").value=text;
+  document.getElementById("shareMeta").textContent=`${vinylCollection.length} record${vinylCollection.length!==1?'s':''} ready to share · ★ = favorite`;
+  document.getElementById("shareLinkMeta").style.display="none";
+  document.getElementById("shareModal").classList.add("open");
+});
+document.getElementById("shareClose").addEventListener("click",()=>document.getElementById("shareModal").classList.remove("open"));
+document.getElementById("shareModal").addEventListener("click",e=>{if(e.target===document.getElementById("shareModal"))document.getElementById("shareModal").classList.remove("open")});
+document.getElementById("shareCopyBtn").addEventListener("click",async()=>{
+  const ta=document.getElementById("shareTextarea");
+  try{
+    await navigator.clipboard.writeText(ta.value);
+    showToast("Copied! Send it to a friend.");
+  }catch{
+    ta.select();
+    try{document.execCommand("copy");showToast("Copied! Send it to a friend.");}
+    catch{showToast("Couldn't copy — select the text manually.")}
+  }
+});
+document.getElementById("shareLinkBtn").addEventListener("click",async()=>{
+  let link;
+  try{
+    link=await buildShareLink();
+  }catch{
+    showToast("Couldn't build a link — try the text option instead.");
+    return;
+  }
+  const metaEl=document.getElementById("shareLinkMeta");
+  metaEl.style.display="block";
+  metaEl.textContent=`Link length: ${link.length} characters`;
+  try{
+    await navigator.clipboard.writeText(link);
+    showToast("Link copied! Send it to a friend.");
+  }catch{
+    const ta=document.getElementById("shareTextarea");
+    ta.value=link;
+    ta.select();
+    try{document.execCommand("copy");showToast("Link copied! Send it to a friend.");}
+    catch{showToast("Couldn't copy — link is in the box above, copy manually.")}
+  }
+});
+
+// ── VIEW A FRIEND'S CRATE ──
+function parseFriendCrateText(raw){
+  const lines=raw.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const albums=[];
+  const lineRe=/^(.+?)\s+[—-]\s+(.+?)\s*\((\d{3,4})\)\s*(?:\[([^\]]+)\])?\s*(★)?$/;
+  lines.forEach(line=>{
+    if(/^THE CRATE/i.test(line))return;
+    if(/^\d+\s+records?$/i.test(line))return;
+    if(/^-{2,}$/.test(line))return;
+    const m=line.match(lineRe);
+    if(m){albums.push({artist:m[1].trim(),title:m[2].trim(),year:m[3].trim(),genre:(m[4]||"Unsorted").trim(),fav:!!m[5]});}
+  });
+  return albums;
+}
+
+// ── SAVED FRIEND CRATES (localStorage) ──
+const FRIEND_CRATES_KEY="crate_friend_crates_v1";
+function loadFriendCrates(){return lsGet(FRIEND_CRATES_KEY,[]);}
+function saveFriendCrates(crates){lsSet(FRIEND_CRATES_KEY,crates);}
+
+let activeFriendAlbums=[];   // currently browsed albums (may not be saved yet)
+let activeFriendCrateId=null; // null = unsaved session
+
+// ── COVER ART FOR FRIEND CARDS ──
+const friendCoverCache={};
+async function fetchFriendCover(artist,title){
+  const ck=(artist+"|"+title).toLowerCase();
+  // Check main caaCache first (shared with your own collection)
+  if(caaCache[ck])return caaCache[ck];
+  if(friendCoverCache[ck]!==undefined)return friendCoverCache[ck];
+  // Try the same DISCOGS_COVERS map
+  if(DISCOGS_COVERS[ck]){friendCoverCache[ck]=DISCOGS_COVERS[ck];return DISCOGS_COVERS[ck];}
+  // iTunes lookup
+  for(const q of buildSearchStrategies(artist,title)){
+    try{
+      const r=await fetch(`https://itunes.apple.com/search?term=${q}&entity=album&limit=10`);
+      if(!r.ok)continue;
+      const d=await r.json();
+      if(d.results&&d.results.length){
+        const normT=normCover(title),normA=normCover(artist);
+        const artistVariants=[normA,...(COVER_ARTIST_ALIASES[normA]||[])];
+        for(const res of d.results){
+          const rT=normCover(res.collectionName||""),rA=normCover(res.artistName||"");
+          const artistMatch=artistVariants.some(a=>rA===a||(a.length>2&&(rA.includes(a)||a.includes(rA))));
+          const titleMatch=rT===normT||(normT.length>2&&(rT.includes(normT)||normT.includes(rT)));
+          if(artistMatch&&titleMatch&&res.artworkUrl100){
+            const url=res.artworkUrl100.replace("100x100bb","300x300bb");
+            friendCoverCache[ck]=url;
+            return url;
+          }
+        }
+      }
+    }catch{}
+    await new Promise(r=>setTimeout(r,180));
+  }
+  friendCoverCache[ck]=null;
+  return null;
+}
+
+function getPlaceholderUrl(genre){return getPlaceholder(genre||"default");}
+
+async function renderFriendResults(albums){
+  const resultsEl=document.getElementById("friendResults");
+  document.getElementById("friendParseError").innerHTML="";
+  if(!albums.length){
+    resultsEl.innerHTML=`<div class="friend-empty">No records could be read. Make sure it's a valid link or text from "Share My Crate".</div>`;
+    document.getElementById("friendAddSection").style.display="none";
+    return;
+  }
+
+  // Build grid with placeholder images first, then load covers async
+  resultsEl.innerHTML=`
+    <div id="friendBannerWrap"></div>
+    <div class="friend-grid" id="friendGrid">
+      ${albums.map((a,i)=>`
+        <div class="friend-card" data-idx="${i}" tabindex="0" role="button" aria-label="${escAttr(a.artist)} — ${escAttr(a.title)}">
+          <div class="fc-art-wrap">
+            <img class="fc-art" id="fca-${i}" src="${escAttr(getPlaceholderUrl(a.genre))}" alt="" referrerpolicy="no-referrer">
+            <div class="fc-overlay-btns">
+              <button class="fc-icon-btn ${a.fav?'fav-active':''}" data-action="fav" data-idx="${i}" title="${a.fav?'Unfavorite':'Favorite'}">${a.fav?'♥':'♡'}</button>
+              <button class="fc-icon-btn" data-action="view" data-idx="${i}" title="View">👁</button>
+            </div>
+          </div>
+          <div class="fc-body">
+            <div class="fc-artist">${escAttr(a.artist)}</div>
+            <div class="fc-title">${escAttr(a.title)}</div>
+            <div class="fc-meta">${escAttr(a.year)} · ${escAttr(a.genre)}${a.fav?' · ♥':''}</div>
+          </div>
+        </div>`).join("")}
+    </div>`;
+
+  renderFriendBanner(albums);
+  document.getElementById("friendAddSection").style.display="block";
+
+  document.getElementById("friendGrid").querySelectorAll(".friend-card").forEach(card=>{
+    const idx=+card.dataset.idx;
+    card.addEventListener("click",e=>{
+      if(e.target.closest(".fc-overlay-btns"))return;
+      document.getElementById("friendModal").classList.remove("open");openFriendDetail(idx);
+    });
+    card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();document.getElementById("friendModal").classList.remove("open");openFriendDetail(idx)}});
+  });
+  document.getElementById("friendGrid").querySelectorAll("[data-action='fav']").forEach(btn=>{
+    btn.addEventListener("click",e=>{
+      e.stopPropagation();
+      const i=+btn.dataset.idx,item=activeFriendAlbums[i];if(!item)return;
+      item.fav=!item.fav;
+      autosaveFriendCrate();
+      renderFriendResults(activeFriendAlbums);
+    });
+  });
+  document.getElementById("friendGrid").querySelectorAll("[data-action='view']").forEach(btn=>{
+    btn.addEventListener("click",e=>{
+      e.stopPropagation();
+      document.getElementById("friendModal").classList.remove("open");
+      openFriendDetail(+btn.dataset.idx);
+    });
+  });
+
+  // Load covers progressively
+  for(let i=0;i<albums.length;i++){
+    const a=albums[i];
+    const img=document.getElementById(`fca-${i}`);
+    if(!img)continue;
+    fetchFriendCover(a.artist,a.title).then(url=>{
+      if(url&&img)img.src=url;
+    });
+    if(i%5===4)await new Promise(r=>setTimeout(r,50)); // small batch pause
+  }
+}
+
+function renderFriendBanner(albums){
+  const wrap=document.getElementById("friendBannerWrap");
+  if(!wrap)return;
+  const saved=activeFriendCrateId!==null;
+  const crates=loadFriendCrates();
+  const thisCrate=saved?crates.find(c=>c.id===activeFriendCrateId):null;
+  const name=thisCrate?thisCrate.name:"Friend's Crate";
+
+  wrap.innerHTML=`
+    <div class="friend-banner" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span style="display:flex;align-items:center;gap:8px">🎵 <strong style="color:var(--cream)">${escAttr(name)}</strong> — ${albums.length} record${albums.length!==1?'s':''}</span>
+      <span style="display:flex;gap:8px;flex-shrink:0">
+        ${saved
+          ? `<span style="font-size:10px;color:var(--cream-dim);font-style:italic;display:flex;align-items:center;gap:4px">✓ Changes saved automatically</span>`
+          : `<button class="friend-save-crate-btn" onclick="promptSaveFriendCrate()" style="background:rgba(127,184,160,.12);color:#7fb8a0;border:1px solid #3a6a55;border-radius:3px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer">💾 Save to Friends</button>`
+        }
+      </span>
+    </div>`;
+}
+
+function promptSaveFriendCrate(){
+  const name=prompt("Name this friend's crate (e.g. their name):");
+  if(!name||!name.trim())return;
+  const crates=loadFriendCrates();
+  const id=Date.now();
+  crates.push({id,name:name.trim(),albums:activeFriendAlbums});
+  saveFriendCrates(crates);
+  activeFriendCrateId=id;
+  renderFriendBanner(activeFriendAlbums);
+  renderSavedCratesList();
+  showToast(`Saved as "${name.trim()}"!`);
+}
+
+// ── LIVE SEARCH FOR FRIEND'S CRATE ADD ──
+let _friendAddSelectedItem = null;
+
+const friendAddDebounce=debounce(async(q)=>{
+  _friendAddSelectedItem=null;
+  if(q.length<2){closeAutocomplete("friendAddAutoDropdown");return;}
+  const drop=document.getElementById("friendAddAutoDropdown");
+  drop.innerHTML=`<div class="ac-spinner">Searching…</div>`;drop.classList.add("open");
+  try{
+    const results=await fetchAlbumSearch(q,8);
+    buildAcDropdown(drop,results,(item)=>{
+      _friendAddSelectedItem=item;
+      document.getElementById("friendAddSearchInput").value=`${item.collectionName||""} — ${item.artistName||""}`;
+      closeAutocomplete("friendAddAutoDropdown");
+      addAlbumToFriendCrateFromSearch(item);
+    },"crate");
+  }catch{drop.classList.remove("open");}
+},380);
+
+document.getElementById("friendAddSearchInput").addEventListener("input",e=>{friendAddDebounce(e.target.value.trim());});
+document.getElementById("friendAddSearchInput").addEventListener("blur",()=>setTimeout(()=>closeAutocomplete("friendAddAutoDropdown"),200));
+document.getElementById("friendAddSearchInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();if(_friendAddSelectedItem)addAlbumToFriendCrateFromSearch(_friendAddSelectedItem);else addAlbumToFriendCrateManual();}});
+
+function addAlbumToFriendCrateFromSearch(item){
+  const year=item.releaseDate?String(item.releaseDate).slice(0,4):"";
+  let genre="";
+  if(item._src==="discogs"&&item._raw){
+    genre=(item._raw.genre&&item._raw.genre[0])||(item._raw.style&&item._raw.style[0])||"";
+  }
+  const artist=item.artistName||"Unknown Artist",title=item.collectionName||"Unknown Album";
+  activeFriendAlbums.push({artist,title,year,genre,fav:false});
+  autosaveFriendCrate();
+  document.getElementById("friendAddSearchInput").value="";
+  _friendAddSelectedItem=null;
+  renderFriendResults(activeFriendAlbums);
+  showToast(`Added ${artist} — ${title}`);
+}
+
+async function addAlbumToFriendCrateManual(){
+  const raw=document.getElementById("friendAddSearchInput").value.trim();
+  if(!raw){showToast("Type an artist or album name first.");return;}
+  let artist="Unknown Artist",title=raw,year="",genre="";
+  // Support "Title — Artist" or "Artist - Title" typed text
+  const dashParts=raw.split(/—| - /).map(s=>s.trim());
+  if(dashParts.length===2){title=dashParts[0];artist=dashParts[1];}
+  try{
+    const results=await fetchAlbumSearch(raw,1);
+    if(results.length){
+      const hit=results[0];
+      artist=hit.artistName||artist;title=hit.collectionName||title;
+      if(hit.releaseDate)year=String(hit.releaseDate).slice(0,4);
+      if(hit._src==="discogs"&&hit._raw)genre=(hit._raw.genre&&hit._raw.genre[0])||(hit._raw.style&&hit._raw.style[0])||"";
+    }
+  }catch{}
+  activeFriendAlbums.push({artist,title,year,genre,fav:false});
+  autosaveFriendCrate();
+  document.getElementById("friendAddSearchInput").value="";
+  renderFriendResults(activeFriendAlbums);
+  showToast(`Added ${artist} — ${title}`);
+}
+
+function renderSavedCratesList(){
+  const crates=loadFriendCrates();
+  const list=document.getElementById("savedCratesList");
+  const empty=document.getElementById("noSavedCrates");
+  if(!crates.length){
+    list.innerHTML="";
+    empty.style.display="block";
+    return;
+  }
+  empty.style.display="none";
+  list.innerHTML=crates.map(c=>`
+    <div class="saved-crate-row ${c.id===activeFriendCrateId?'selected':''}" data-cid="${c.id}" id="scr-${c.id}">
+      <div class="scr-name" id="scrname-${c.id}">${escAttr(c.name)}</div>
+      <div class="scr-count">${c.albums.length} records</div>
+      <button class="scr-rename-btn" onclick="renameSavedCrate(${c.id},event)">✎ Rename</button>
+      <button class="scr-delete-btn" onclick="deleteSavedCrate(${c.id},event)">🗑</button>
+    </div>`).join("");
+
+  list.querySelectorAll(".saved-crate-row").forEach(row=>{
+    row.addEventListener("click",e=>{
+      if(e.target.closest("button"))return;
+      const cid=+row.dataset.cid;
+      openSavedFriendCrate(cid);
+    });
+  });
+}
+
+function openSavedFriendCrate(id){
+  const crates=loadFriendCrates();
+  const c=crates.find(x=>x.id===id);
+  if(!c)return;
+  activeFriendAlbums=c.albums;
+  activeFriendCrateId=id;
+  switchFriendTab("browse");
+  document.getElementById("browseFriendTabBtn").style.display="";
+  renderFriendResults(c.albums);
+  renderSavedCratesList();
+}
+
+function renameSavedCrate(id,e){
+  e.stopPropagation();
+  const row=document.getElementById(`scr-${id}`);
+  const nameEl=document.getElementById(`scrname-${id}`);
+  const old=nameEl.textContent;
+  const input=document.createElement("input");
+  input.className="scr-rename-input";
+  input.value=old;
+  nameEl.replaceWith(input);
+  input.focus();
+  input.select();
+  const commit=()=>{
+    const val=input.value.trim()||old;
+    const crates=loadFriendCrates();
+    const c=crates.find(x=>x.id===id);
+    if(c){c.name=val;saveFriendCrates(crates);}
+    renderSavedCratesList();
+    if(activeFriendCrateId===id)renderFriendBanner(activeFriendAlbums);
+    showToast(`Renamed to "${val}"`);
+  };
+  input.addEventListener("blur",commit);
+  input.addEventListener("keydown",ev=>{if(ev.key==="Enter")input.blur();if(ev.key==="Escape"){input.value=old;input.blur();}});
+}
+
+function deleteSavedCrate(id,e){
+  e.stopPropagation();
+  const crates=loadFriendCrates();
+  const c=crates.find(x=>x.id===id);
+  if(!c||!confirm(`Delete "${c.name}"?`))return;
+  const updated=crates.filter(x=>x.id!==id);
+  saveFriendCrates(updated);
+  if(activeFriendCrateId===id){activeFriendCrateId=null;activeFriendAlbums=[];}
+  renderSavedCratesList();
+  showToast("Crate deleted.");
+}
+
+function switchFriendTab(tab){
+  document.querySelectorAll(".friend-tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.ftab===tab));
+  document.querySelectorAll(".friend-tab-panel").forEach(p=>p.classList.toggle("active",p.id===`ftab-${tab}`));
+}
+
+document.querySelectorAll(".friend-tab-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>switchFriendTab(btn.dataset.ftab));
+});
+
+function extractShareCodeFromInput(raw){
+  const trimmed=raw.trim();
+  if(!trimmed)return null;
+  const hashMatch=trimmed.match(/#share=([^&\s]+)/);
+  if(hashMatch)return hashMatch[1];
+  if(/^[A-Za-z0-9_-]+$/.test(trimmed))return trimmed;
+  return null;
+}
+
+async function loadFriendAlbumsAndBrowse(albums){
+  activeFriendAlbums=albums;
+  activeFriendCrateId=null;
+  document.getElementById("browseFriendTabBtn").style.display="";
+  switchFriendTab("browse");
+  await renderFriendResults(albums);
+}
+
+async function openFriendModalWithCode(code){
+  document.getElementById("friendModal").classList.add("open");
+  document.getElementById("friendParseError").innerHTML="";
+  try{
+    const albums=await decodeCrateLink(code);
+    await loadFriendAlbumsAndBrowse(albums);
+  }catch{
+    document.getElementById("friendParseError").innerHTML=`<div class="friend-parse-error">That link couldn't be read — it may be incomplete or corrupted.</div>`;
+  }
+}
+
+document.getElementById("viewFriendBtn").addEventListener("click",()=>{
+  renderSavedCratesList();
+  document.getElementById("friendModal").classList.add("open");
+});
+document.getElementById("friendClose").addEventListener("click",()=>document.getElementById("friendModal").classList.remove("open"));
+document.getElementById("friendModal").addEventListener("click",e=>{if(e.target===document.getElementById("friendModal"))document.getElementById("friendModal").classList.remove("open")});
+
+document.getElementById("friendViewBtn").addEventListener("click",async()=>{
+  const raw=document.getElementById("friendTextarea").value;
+  if(!raw.trim()){
+    document.getElementById("friendParseError").innerHTML=`<div class="friend-parse-error">Paste your friend's crate text first.</div>`;
+    return;
+  }
+  const albums=parseFriendCrateText(raw);
+  document.getElementById("friendParseError").innerHTML="";
+  await loadFriendAlbumsAndBrowse(albums);
+});
+
+document.getElementById("friendLinkBtn").addEventListener("click",async()=>{
+  const raw=document.getElementById("friendLinkInput").value;
+  const code=extractShareCodeFromInput(raw);
+  if(!code){
+    document.getElementById("friendParseError").innerHTML=`<div class="friend-parse-error">Paste a valid shared crate link first.</div>`;
+    return;
+  }
+  try{
+    const albums=await decodeCrateLink(code);
+    document.getElementById("friendParseError").innerHTML="";
+    await loadFriendAlbumsAndBrowse(albums);
+  }catch{
+    document.getElementById("friendParseError").innerHTML=`<div class="friend-parse-error">That link couldn't be read — it may be incomplete or corrupted.</div>`;
+  }
+});
+
+document.getElementById("friendClearBtn").addEventListener("click",()=>{
+  document.getElementById("friendTextarea").value="";
+  document.getElementById("friendLinkInput").value="";
+  document.getElementById("friendParseError").innerHTML="";
+});
+
+// Auto-open friend view if the page was loaded with a #share= link
+(function checkIncomingShareLink(){
+  const m=window.location.hash.match(/share=([^&\s]+)/);
+  if(m)openFriendModalWithCode(m[1]);
+})();
 
 // ── TOAST ──
 let toastTimer=null;
