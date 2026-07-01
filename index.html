@@ -258,7 +258,14 @@
   .wantlist-list{padding:12px 24px 24px;display:flex;flex-direction:column;gap:8px;min-height:120px}
   .want-item{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:3px;transition:border-color .15s;cursor:pointer}
   .want-item:hover{border-color:#2a4a6a}
-  .want-item-art{width:48px;height:48px;border-radius:2px;object-fit:cover;background:var(--groove);flex-shrink:0}
+  .want-item-art{width:48px;height:48px;border-radius:2px;object-fit:cover;background:var(--groove);flex-shrink:0;display:block}
+  .want-item-art-wrap{position:relative;flex-shrink:0;width:48px;height:48px;border-radius:2px;overflow:visible}
+  .want-overlay-btns{position:absolute;top:-6px;right:-6px;display:flex;flex-direction:column;gap:3px;z-index:5;opacity:0;transition:opacity .2s}
+  .want-item:hover .want-overlay-btns,.want-item:focus-within .want-overlay-btns,.want-item.menu-open .want-overlay-btns{opacity:1}
+  .want-icon-btn{width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.78);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,transform .1s;backdrop-filter:blur(4px);font-size:10px;color:var(--cream-dim);flex-shrink:0}
+  .want-icon-btn:hover{background:rgba(30,30,30,.95);transform:scale(1.1)}
+  .want-icon-btn.fav-active{color:var(--heart)}
+  .want-menu-popup{position:absolute;top:24px;left:-4px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;min-width:180px;max-width:calc(100vw - 48px);box-shadow:0 8px 24px rgba(0,0,0,.7);z-index:30;overflow:hidden;animation:popIn .15s ease both}
   .want-item-info{flex:1;min-width:0}
   .want-item-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .want-item-artist{font-size:11px;color:var(--cream-dim)}
@@ -423,7 +430,8 @@
     .card-genre-tag{font-size:7px;padding:1px 4px}
     /* Detail modal */
     .detail-modal-header{grid-template-columns:1fr}
-    .detail-art-wrap{border-radius:6px 6px 0 0;aspect-ratio:16/9;max-height:200px}
+    .detail-art-wrap{border-radius:6px 6px 0 0;aspect-ratio:1;max-height:min(78vw,420px)}
+    .detail-art-wrap img{object-fit:contain}
     .form-row{grid-template-columns:1fr}
   }
   @media(max-width:400px){.grid{grid-template-columns:repeat(3,1fr)}}
@@ -1720,6 +1728,28 @@ function updateCondition(val){
 }
 
 // ── CARD CONTEXT MENU ──
+// Nudges a freshly-appended absolutely-positioned popup back within the
+// viewport if it would otherwise overflow left/right/bottom — needed on
+// narrow phones where cards/rows sit close to the screen edge.
+function keepMenuOnScreen(menu){
+  const pad=8;
+  const parent=menu.offsetParent;
+  if(!parent)return;
+  const parentRect=parent.getBoundingClientRect();
+  const rect=menu.getBoundingClientRect();
+  let newLeft=rect.left-parentRect.left;
+  if(rect.right>window.innerWidth-pad)newLeft-=(rect.right-(window.innerWidth-pad));
+  const pageLeftAfterShift=parentRect.left+newLeft;
+  if(pageLeftAfterShift<pad)newLeft+=(pad-pageLeftAfterShift);
+  menu.style.left=newLeft+"px";
+  menu.style.right="auto";
+  const rect2=menu.getBoundingClientRect();
+  if(rect2.bottom>window.innerHeight-pad){
+    const curTop=rect2.top-parentRect.top;
+    menu.style.top=(curTop-(rect2.bottom-(window.innerHeight-pad)))+"px";
+  }
+}
+
 function openCardMenu(id,btn){
   closeCardMenu();activeMenuId=id;
   const isFav=favorites.has(id);
@@ -1732,7 +1762,8 @@ function openCardMenu(id,btn){
     <button class="menu-item" data-action="edit-cover"><span class="menu-icon">📷</span>Change Cover</button>
     <div class="menu-sep"></div>
     <button class="menu-item danger" data-action="delete"><span class="menu-icon">🗑</span>Remove from Crate</button>`;
-  btn.closest(".card-art").appendChild(menu);
+  btn.closest(".card").appendChild(menu);
+  keepMenuOnScreen(menu);
   menu.querySelector("[data-action='open']").onclick=()=>{closeCardMenu();openDetail(id)};
   menu.querySelector("[data-action='fav']").onclick=()=>{closeCardMenu();toggleFavorite(id)};
   menu.querySelector("[data-action='about']").onclick=()=>{closeCardMenu();openDetail(id);setTimeout(()=>{activateTab("about");buildAboutTab(id)},250)};
@@ -1803,7 +1834,7 @@ function setDetailModalMode(mode){
   document.querySelector('.tab-btn[data-tab="grade"]').style.display=ownerOnly?"none":"";
   document.querySelector('.tab-btn[data-tab="tracklist"]').style.display=ownerOnly?"none":"";
   document.querySelector('.tab-btn[data-tab="notes"]').style.display=ownerOnly?"none":"";
-  document.getElementById("photoUploadTrigger").style.display=ownerOnly?"none":"";
+  document.getElementById("photoUploadTrigger").style.display=isFriend?"none":"";
   const condChip=document.getElementById("conditionChip"),fmtChip=document.getElementById("modalFormat").closest(".detail-chip");
   if(condChip)condChip.style.display=ownerOnly?"none":"";
   if(fmtChip)fmtChip.style.display=ownerOnly?"none":"";
@@ -1821,7 +1852,9 @@ function openWantDetail(id){
   currentDetailId=null;
   setDetailModalMode("want");
   const modalArt=document.getElementById("modalArt");
-  modalArt.src=item.artUrl||getPlaceholder(item.genre||"default");modalArt.alt=item.title;
+  const wantCk=(item.artist+"|"+item.title).toLowerCase();
+  modalArt.src=caaCache[wantCk]||item.artUrl||getPlaceholder(item.genre||"default");modalArt.alt=item.title;
+  lookupCoverArt(item.artist,item.title).then(url=>{if(url&&currentWantId===id)modalArt.src=url});
   document.getElementById("modalGenreText").textContent=item.genre||"Unsorted";
   document.getElementById("modalGenre").title="";
   document.getElementById("modalGenre").onclick=null;
@@ -1945,11 +1978,20 @@ function triggerFileUpload(src){
   input.click();
 }
 document.getElementById("coverFileInput").addEventListener("change",function(){
-  const file=this.files[0];if(!file||!currentDetailId)return;
+  const file=this.files[0];if(!file)return;
+  if(currentWantId==null&&!currentDetailId)return;
   const reader=new FileReader();
   reader.onload=e=>{
-    customCovers[currentDetailId]=e.target.result;saveCustomCovers();
-    document.getElementById("modalArt").src=e.target.result;render();showToast("Cover photo updated");
+    if(currentWantId!=null){
+      const item=wantList.find(x=>x.id===currentWantId);
+      if(item){
+        item.artUrl=e.target.result;saveWantList();
+        document.getElementById("modalArt").src=e.target.result;renderWantList();showToast("Cover photo updated");
+      }
+    } else {
+      customCovers[currentDetailId]=e.target.result;saveCustomCovers();
+      document.getElementById("modalArt").src=e.target.result;render();showToast("Cover photo updated");
+    }
   };
   reader.readAsDataURL(file);this.value="";
 });
@@ -2840,6 +2882,7 @@ function commitWantItem(itunesItem){
     genre=g;
   }
   const item={id:Date.now(),artist:itunesItem.artistName||"Unknown Artist",title:itunesItem.collectionName||"Unknown Album",year,artUrl:itunesItem.artworkUrl100||itunesItem.artworkUrl60||"",genre,fav:false};
+  if(item.artUrl){const ck=(item.artist+"|"+item.title).toLowerCase();if(!caaCache[ck]){caaCache[ck]=item.artUrl;saveCaaCache();}}
   wantList.push(item);saveWantList();renderWantList();
   document.getElementById("wantSearchInput").value="";
   _wantSelectedItem=null;
@@ -2882,9 +2925,18 @@ function renderWantList(){
   const list=document.getElementById("wantlistList"),count=document.getElementById("wantlistCount");
   count.textContent=wantList.length===1?"1 record":`${wantList.length} records`;
   if(!wantList.length){list.innerHTML=`<div class="wantlist-empty">🎯 Your wish list is empty.<br>Add albums you're hunting for.</div>`;return}
-  list.innerHTML=wantList.map(item=>`
+  list.innerHTML=wantList.map(item=>{
+    const ck=(item.artist+"|"+item.title).toLowerCase();
+    const coverSrc=caaCache[ck]||item.artUrl||getPlaceholder(item.genre||'default');
+    return `
     <div class="want-item" data-id="${item.id}" tabindex="0" role="button" aria-label="${escAttr(item.artist)} — ${escAttr(item.title)}">
-      <img class="want-item-art" src="${escAttr(item.artUrl||getPlaceholder(item.genre||'default'))}" alt="" referrerpolicy="no-referrer">
+      <div class="want-item-art-wrap">
+        <img class="want-item-art" src="${escAttr(coverSrc)}" data-artist="${escAttr(item.artist)}" data-title="${escAttr(item.title)}" data-year="${escAttr(item.year||'')}" alt="" referrerpolicy="no-referrer" loading="lazy">
+        <div class="want-overlay-btns">
+          <button class="want-icon-btn ${item.fav?'fav-active':''}" data-action="wfav" data-id="${item.id}" title="${item.fav?'Remove from favorites':'Add to favorites'}">${item.fav?'♥':'♡'}</button>
+          <button class="want-icon-btn" data-action="wmenu" data-id="${item.id}" title="More options">≡</button>
+        </div>
+      </div>
       <div class="want-item-info">
         <div class="want-item-title">${escAttr(item.title)}</div>
         <div class="want-item-artist">${escAttr(item.artist)}</div>
@@ -2894,10 +2946,16 @@ function renderWantList(){
         </div>
       </div>
       ${item.year?`<span class="want-item-year">${escAttr(item.year)}</span>`:""}
-      <button class="want-fav-btn ${item.fav?'fav-active':''}" data-id="${item.id}" title="${item.fav?'Remove from favorites':'Add to favorites'}">${item.fav?'♥':'♡'}</button>
       <button class="want-move-btn" data-id="${item.id}">→ Crate</button>
       <button class="want-remove-btn" data-id="${item.id}" title="Remove">×</button>
-    </div>`).join("");
+    </div>`;
+  }).join("");
+  // Same lazy-load + auto-improve cover art pipeline the crate grid uses:
+  // shows the cached/placeholder image immediately, then swaps in a better
+  // match from iTunes (via coverObserver → coverQueue) once it scrolls into view.
+  list.querySelectorAll(".want-item-art").forEach(img=>{
+    coverObserver.observe(img);
+  });
   list.querySelectorAll(".want-item").forEach(row=>{
     const id=+row.dataset.id;
     row.addEventListener("click",e=>{if(e.target.closest("button"))return;document.getElementById("wantlistModal").classList.remove("open");openWantDetail(id)});
@@ -2905,7 +2963,44 @@ function renderWantList(){
   });
   list.querySelectorAll(".want-move-btn").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();moveWantToCrate(+btn.dataset.id)}));
   list.querySelectorAll(".want-remove-btn").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();removeWantItem(+btn.dataset.id)}));
-  list.querySelectorAll(".want-fav-btn").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();toggleWantFavorite(+btn.dataset.id)}));
+  list.querySelectorAll("[data-action='wfav']").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();toggleWantFavorite(+btn.dataset.id)}));
+  list.querySelectorAll("[data-action='wmenu']").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();openWantCardMenu(+btn.dataset.id,btn)}));
+}
+
+// ── WISHLIST CARD CONTEXT MENU ──
+// Mirrors openCardMenu() for crate albums: tapping the ≡ icon on a wishlist
+// item's art reveals View Details / Favorite / About / Change Cover / Move /
+// Remove, so wishlist items get the same discoverable cover-change flow.
+let activeWantMenuId=null;
+function openWantCardMenu(id,btn){
+  closeCardMenu();closeWantCardMenu();activeWantMenuId=id;
+  const item=wantList.find(x=>x.id===id);if(!item)return;
+  const row=btn.closest(".want-item");if(row)row.classList.add("menu-open");
+  const menu=document.createElement("div");
+  menu.className="want-menu-popup";menu.id="activeWantMenu";
+  menu.innerHTML=`
+    <button class="menu-item" data-action="open"><span class="menu-icon">📖</span>View Details</button>
+    <button class="menu-item" data-action="fav"><span class="menu-icon">${item.fav?'♥':'♡'}</span>${item.fav?'Remove Favorite':'Add to Favorites'}</button>
+    <button class="menu-item" data-action="about"><span class="menu-icon">🎵</span>About This Album</button>
+    <button class="menu-item" data-action="edit-cover"><span class="menu-icon">📷</span>Change Cover</button>
+    <div class="menu-sep"></div>
+    <button class="menu-item" data-action="move"><span class="menu-icon">📦</span>Move to Crate</button>
+    <button class="menu-item danger" data-action="delete"><span class="menu-icon">🗑</span>Remove from Wish List</button>`;
+  btn.closest(".want-item-art-wrap").appendChild(menu);
+  keepMenuOnScreen(menu);
+  menu.querySelector("[data-action='open']").onclick=()=>{closeWantCardMenu();document.getElementById("wantlistModal").classList.remove("open");openWantDetail(id)};
+  menu.querySelector("[data-action='fav']").onclick=()=>{closeWantCardMenu();toggleWantFavorite(id)};
+  menu.querySelector("[data-action='about']").onclick=()=>{closeWantCardMenu();document.getElementById("wantlistModal").classList.remove("open");openWantDetail(id);setTimeout(()=>{activateTab("about");buildAboutTab(null,item)},250)};
+  menu.querySelector("[data-action='edit-cover']").onclick=()=>{closeWantCardMenu();document.getElementById("wantlistModal").classList.remove("open");openWantDetail(id);setTimeout(()=>document.getElementById("photoUploadTrigger").click(),300)};
+  menu.querySelector("[data-action='move']").onclick=()=>{closeWantCardMenu();moveWantToCrate(id)};
+  menu.querySelector("[data-action='delete']").onclick=()=>{closeWantCardMenu();removeWantItem(id)};
+  setTimeout(()=>document.addEventListener("click",outsideWantMenuClick,{once:true}),0);
+}
+function outsideWantMenuClick(e){if(!e.target.closest("#activeWantMenu")&&!e.target.closest("[data-action='wmenu']"))closeWantCardMenu()}
+function closeWantCardMenu(){
+  const m=document.getElementById("activeWantMenu");if(m)m.remove();
+  document.querySelectorAll(".want-item.menu-open").forEach(r=>r.classList.remove("menu-open"));
+  activeWantMenuId=null;
 }
 
 // ── STATS MODAL ──
