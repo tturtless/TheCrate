@@ -1853,8 +1853,9 @@ function openWantDetail(id){
   setDetailModalMode("want");
   const modalArt=document.getElementById("modalArt");
   const wantCk=(item.artist+"|"+item.title).toLowerCase();
-  modalArt.src=caaCache[wantCk]||item.artUrl||getPlaceholder(item.genre||"default");modalArt.alt=item.title;
-  lookupCoverArt(item.artist,item.title).then(url=>{if(url&&currentWantId===id)modalArt.src=url});
+  const hasCustomArt=item.artUrl&&item.artUrl.startsWith("data:");
+  modalArt.src=item.artUrl||caaCache[wantCk]||getPlaceholder(item.genre||"default");modalArt.alt=item.title;
+  if(!hasCustomArt)lookupCoverArt(item.artist,item.title).then(url=>{if(url&&currentWantId===id)modalArt.src=url});
   document.getElementById("modalGenreText").textContent=item.genre||"Unsorted";
   document.getElementById("modalGenre").title="";
   document.getElementById("modalGenre").onclick=null;
@@ -2933,7 +2934,10 @@ function renderWantList(){
   if(!wantList.length){list.innerHTML=`<div class="wantlist-empty">🎯 Your wish list is empty.<br>Add albums you're hunting for.</div>`;return}
   list.innerHTML=wantList.map(item=>{
     const ck=(item.artist+"|"+item.title).toLowerCase();
-    const coverSrc=caaCache[ck]||item.artUrl||getPlaceholder(item.genre||'default');
+    // A user-uploaded photo (data URL) must always win over the shared auto-fetched
+    // art cache, otherwise the wishlist grid keeps showing the original cover even
+    // after the user replaces it.
+    const coverSrc=item.artUrl||caaCache[ck]||getPlaceholder(item.genre||'default');
     return `
     <div class="want-item" data-id="${item.id}" tabindex="0" role="button" aria-label="${escAttr(item.artist)} — ${escAttr(item.title)}">
       <div class="want-item-art-wrap">
@@ -2960,7 +2964,10 @@ function renderWantList(){
   // shows the cached/placeholder image immediately, then swaps in a better
   // match from iTunes (via coverObserver → coverQueue) once it scrolls into view.
   list.querySelectorAll(".want-item-art").forEach(img=>{
-    coverObserver.observe(img);
+    const id=+img.closest(".want-item").dataset.id;
+    const item=wantList.find(x=>x.id===id);
+    // Don't let the auto-improve pipeline overwrite a user-uploaded photo.
+    if(!(item&&item.artUrl&&item.artUrl.startsWith("data:")))coverObserver.observe(img);
   });
   list.querySelectorAll(".want-item").forEach(row=>{
     const id=+row.dataset.id;
